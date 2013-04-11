@@ -13,7 +13,7 @@ STM32F10X_OBJ = $(STM32F10X_INC:.h=.o)
 all : imu
 
 imu : main.o startup_stm32f10x_hd.o $(STM32F10X_OBJ)
-	$(CROSS_COMPILE)$(LD) -T stm32f10x.ld $(LDFLAGS) $^ -o $@
+	$(CROSS_COMPILE)$(LD) -T stm32f10x_hd.ld $(LDFLAGS) $^ -o $@
 
 main.o : main.c stm32f10x.h
 	$(CROSS_COMPILE)$(CC) -c $(CFLAGS) $< -o $@
