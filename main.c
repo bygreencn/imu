@@ -24,14 +24,51 @@ void hw_init()
 	RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART2, ENABLE);
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA | RCC_APB2Periph_AFIO, ENABLE); 
 
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_2;
+	//Configuring the Alternative Function Push-Pull pins
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
+	// GPIOA: RTS, TX, (CS), SCK, MOSI => PA1, PA2, PA5, PA7
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_7 | GPIO_Pin_5 | GPIO_Pin_2 | GPIO_Pin_1;
 	GPIO_Init(GPIOA, &GPIO_InitStructure);
+	// GPIOC: D0-D3, SD_CLK => PC8, PC9, PC10, PC11, PC12
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_12 | GPIO_Pin_11 | GPIO_Pin_10 | GPIO_Pin_9 | GPIO_Pin_8;
+	GPIO_Init(GPIOC, &GPIO_InitStructure);
+	// GPIOD: SD_CMD => PD2
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_2;
+	GPIO_Init(GPIOD, &GPIO_InitStructure);
 
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_3;
+	//Configuring the Alternate Function Open Drain pins
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_OD;
+	// GPIOB: SCL1, SDA1, SCL2, SDA2 => PB6, PB7, PB10, PB11
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_11 | GPIO_Pin_10 | GPIO_Pin_7 | GPIO_Pin_6;
+	GPIO_Init(GPIOB, &GPIO_InitStructure);
+
+	//Configuring the General Purpose Push-Pull pins
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+	// GPIOA: USB_DISCONNECT => PA10
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_10;
 	GPIO_Init(GPIOA, &GPIO_InitStructure);
+	// GPIOB: RP_ST, RP_SPD, RP_HP, LED, Y_ST, Y_SPD => PB1, PB2, PB5, PB9, PB14, PB15
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_15 | GPIO_Pin_14 | GPIO_Pin_9 | GPIO_Pin_5 | GPIO_Pin_2 | GPIO_Pin_1;
+	GPIO_Init(GPIOB, &GPIO_InitStructure);
+
+	//Configuring the Analog Input pins
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AIN;
+	// GPIOC: X, Y, RefXY, Z, RefZ => PC0, PC1, PC2, PC4, PC5
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_5 | GPIO_Pin_4 | GPIO_Pin_2 | GPIO_Pin_1 | GPIO_Pin_0;
+	GPIO_Init(GPIOC, &GPIO_InitStructure);
+
+	//Configuring the Floating Inputs pins
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
+	// GPIOA: CTS, RX, MISO, INT1_PS => PA0, PA3, PA6, PA9
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_9 | GPIO_Pin_6 | GPIO_Pin_3 | GPIO_Pin_0;
+	GPIO_Init(GPIOA, &GPIO_InitStructure);
+	// GPIOB: DRDY_M, INT1_ACC, INT2_ACC => PB8, PB12, PB13
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_13 | GPIO_Pin_12 | GPIO_Pin_8;
+	GPIO_Init(GPIOB, &GPIO_InitStructure);
+	// GPIOC: OV/INT_TMP, TAMPER => PC6, PC13
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_13 | GPIO_Pin_6;
+	GPIO_Init(GPIOC, &GPIO_InitStructure);
 
 	USART_InitStructure.USART_BaudRate = BAUD_RATE;
 	USART_InitStructure.USART_WordLength = USART_WordLength_8b;
