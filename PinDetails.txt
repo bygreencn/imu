@@ -1,0 +1,166 @@
+List of the pins connected and their functions by port names
+============================================================
+
+- GPIOA
+
+	- PA0-PA3   => Connected to J4 for RS232 Communication with USART2.
+		*PA0:  CTS
+		*PA1:  RTS
+		*PA2:  TX
+		*PA3:  RX
+	- PA4-PA7   => Connected to J8 for SPI Communication with SPI1.
+		*PA4:  CS
+		*PA5:  SCK
+		*PA6:  MISO
+		*PA7:  MOSI
+	- PA8       => MCO(?) connected to J8
+	- PA9       => INT1 signal from the pressure sensor
+	- PA10      => Controls the connection of the USB (USB_DISCONNECT)
+	- PA11-PA12 => USB data lines
+	- PA13-PA15 => JTAG signals
+		*PA13: JTMS
+		*PA14: JTCK
+		*PA15: JTDI
+
+- GPIOB
+
+	- PB0       => Connected to J8
+	- PB1       => Self-Test pin of the 2-axis roll/pitch gyroscope
+	- PB2       => Sleep/Power-Down signal for the 2-axis roll/pitch gyroscope
+	- PB3-PB4   => JTAG signals
+		*PB3:  JTDO
+		*PB4:  JNTRST
+	- PB5       => High-pass filter control for the 2-axis roll/pitch gyroscope
+		#0: Normal operation
+		#1: External high-pass filter is reset
+	- PB6-PA7   => I2C connection to 6-axis geomagnetic module
+		*PB6:  SCL
+		*PB7:  SDA
+	- PB8       => Magnetic signal interface data ready signal
+	- PB9       => User LED output
+	- PB10-PB11 => I2C connection to Pressure and Temperature sensors
+		*PB10: SCL
+		*PB11: SDA
+	- PB12-PB13 => Interrupt lines for the accelerometer
+		*PB12: INT1
+		*PB13: INT2
+	- PB14      => Self-Test of the Yaw gyroscope
+	- PB15      => Sleep/Power-Down of the Yaw gyroscope
+
+- GPIOC
+
+	- PC0-PC1   => Analog outputs from the 2-axis roll/pitch gyroscope
+		*PC0:  Axis X
+		*PC1:  Axis Y
+	- PC2       => Low pass filter reference voltage for 2-axis roll/pitch gyroscope outputs
+	- PC3       => Connected to J8
+	- PC4       => Analog output from the Yaw gyroscope
+	- PC5       => Low pass filter reference voltage for Yaw gyroscope
+	- PC6       => Overlimit/interrupt signal for the temperature sensor
+	- PC7       => Connected to J8
+	- PC8-PC12  => SD card signals
+		*PC8:  D0
+		*PC9:  D1
+		*PC10: D2
+		*PC11: D3
+		*PC12: CLK
+	- PC13      => Tamper push button
+	- PC14-PC15 => 32.768 kHz oscillator
+		*PC14: OSC32_IN
+		*PC15: OSC32_OUT
+
+- GPIOD
+
+	- PD0-PD1   => Main oscillator (8 MHz)
+	- PD2       => SD card CMD signal
+
+======================================================
+List of the modules of the iNEMO and their connections
+======================================================
+
+- 3-axis accelerometer (LSM303DLH)
+	- I2C1 (Read: 0x33 | Write: 0x32)
+		*SCL:      PB6
+		*SDA:      PB7
+	- INT1 & INT2
+		*INT1:     PB12
+		*INT2:     PB13
+
+- 3-axis magnetometer (LSM303DLH)
+	- I2C1 (Read: 0x3D | Write: 0x3C)
+		*SCL:      PB6
+		*SDA:      PB7
+	- Interface ready
+		*DRDY_M:   PB8
+
+- 2-axis roll/pitch gyroscope (LPR430AL)
+	- Control signals
+		*PD/Sleep: PB2
+		*ST:       PB1
+		*HP:       PB5
+		*VREF:     PC2
+	- Analog outputs
+		*X:        PC0
+		*Y:        PC1
+
+- Yaw gyroscope (LY330ALH)
+	- Control signals
+		*PD/Sleep: PB15
+		*ST:       PB14
+		*VREF:     PC5
+	- Analog output
+		*Z:        PC4
+
+- Temperature Sensor (STLM75DS2F)
+	- I2C2 (Read: 0x91 | Write: 0x90)
+		*SCL:      PB10
+		*SDA:      PB11
+	- Overlinit/interrupt signal
+		*nOS/INT:  PC6
+
+- Pressure Sensor (LPS001DL)
+	- I2C2 (Read: 0xBB | Write: 0xBA)
+		*SCL:      PB10
+		*SDA:      PB11
+	- Presure interrupt signal
+		*INT1_PS:  PA9
+
+- Connector J4 (+3.3v: 6 | GND: 5)
+	- Serial signals
+		*CTS(4):   PA0
+		*RTS(3):   PA1
+		*TX(2):    PA2
+		*RX(1):    PA3
+
+- Connector J8 (+3.3v : 2 | GND : 1)
+	- SPI
+		*CS(4):    PA4
+		*SCK(5):   PA5
+		*MISO(7):  PA6
+		*MOSI(6):  PA7
+	- GPIO
+		*GPIO1(9): PA8
+		*GPIO2(3): PB0
+		*GPIO3(10):PC3
+		*GPIO4(8): PC7
+
+- SD card
+	-SD signals
+		*D0:       PC8
+		*D1:       PC9
+		*D2:       PC10
+		*D3:       PC11
+		*CLK:      PC12
+		*CMD:      PD2
+
+- Misc
+	-Push button
+		*TAMPER:   PC13
+	-LED
+		*User_LED: PB9
+	-Main oscillator (8MHz)
+		*OSCIN:    PD0
+		*OSCOUT:   PD1
+	-Secondary oscillator (32.768 kHz)
+		*OSC32_IN: PC14
+		*OSC32_OUT:PC15
