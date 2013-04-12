@@ -52,10 +52,10 @@ List of the pins connected and their functions by port names
 	- PC0-PC1   => Analog outputs from the 2-axis roll/pitch gyroscope
 		*PC0:  Axis X
 		*PC1:  Axis Y
-	- PC2       => Low pass filter reference voltage for 2-axis roll/pitch gyroscope outputs
+	- PC2       => Center reference voltage for 2-axis roll/pitch gyroscope outputs
 	- PC3       => Connected to J8
 	- PC4       => Analog output from the Yaw gyroscope
-	- PC5       => Low pass filter reference voltage for Yaw gyroscope
+	- PC5       => Center reference voltage for Yaw gyroscope
 	- PC6       => Overlimit/interrupt signal for the temperature sensor
 	- PC7       => Connected to J8
 	- PC8-PC12  => SD card signals
@@ -152,6 +152,11 @@ List of the modules of the iNEMO and their connections
 		*D3:       PC11
 		*CLK:      PC12
 		*CMD:      PD2
+
+- USB
+	-Data signals
+		*D+:       PA12
+		*D-:       PA11
 
 - Misc
 	-Push button
