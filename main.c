@@ -20,8 +20,13 @@ void hw_init()
 {
 	GPIO_InitTypeDef GPIO_InitStructure;
 	USART_InitTypeDef USART_InitStructure;
+	EXTI_InitTypeDef EXTI_InitStructure;
+	NVIC_InitTypeDef NVIC_InitStructure;
+	I2C_InitTypeDef I2C_InitStructure;
 
-	RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART2, ENABLE);
+	RCC_USBCLKConfig(RCC_USBCLKSource_PLLCLK_1Div5);
+
+	RCC_APB1PeriphClockCmd(RCC_APB1Periph_USB | RCC_APB1Periph_USART2 | RCC_APB1Periph_I2C1 | RCC_APB1Periph_I2C2, ENABLE);
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA | RCC_APB2Periph_AFIO, ENABLE); 
 
 	//Configuring the Alternative Function Push-Pull pins
@@ -70,15 +75,41 @@ void hw_init()
 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_13 | GPIO_Pin_6;
 	GPIO_Init(GPIOC, &GPIO_InitStructure);
 
+	//EXTI_ClearITPendingBit(EXTI_Line18);
+	//EXTI_InitStructure.EXTI_Line = EXTI_Line18;
+	//EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Rising;
+	//EXTI_InitStructure.EXTI_LineCmd = ENABLE;
+	//EXTI_Init(&EXTI_InitStructure);
+
 	USART_InitStructure.USART_BaudRate = BAUD_RATE;
 	USART_InitStructure.USART_WordLength = USART_WordLength_8b;
 	USART_InitStructure.USART_StopBits = USART_StopBits_1;
 	USART_InitStructure.USART_Parity = USART_Parity_No;
 	USART_InitStructure.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
 	USART_InitStructure.USART_Mode = USART_Mode_Rx | USART_Mode_Tx;
-
 	USART_Init(USART2, &USART_InitStructure);
 	USART_Cmd(USART2, ENABLE);
+
+	I2C_InitStructure.I2C_Ack = I2C_Ack_Enable;
+	I2C_InitStructure.I2C_AcknowledgedAddress = I2C_AcknowledgedAddress_7bit;
+	I2C_InitStructure.I2C_ClockSpeed = 400000;
+	I2C_InitStructure.I2C_DutyCycle = I2C_DutyCycle_2;
+	I2C_InitStructure.I2C_Mode = I2C_Mode_I2C;
+	I2C_InitStructure.I2C_OwnAddress1 = 0x00;
+	I2C_Init(&I2C_InitStructure, I2C1); //For Accelerometer & magnetometer
+	I2C_Init(&I2C_InitStructure, I2C2); //For Temperature & Pressure sensor
+
+	//NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
+	
+	//NVIC_InitStructure.NVIC_IRQChannel = USB_LP_CAN1_RX0_IRQn;
+	//NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 2;
+	//NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
+	//NVIC_InitStructure.MVIC_IRQChannelCmd = ENABLE;
+	//NVIC_Init(&NVIC_InitStructure);
+
+	//NVIC_InitStructure.NVIC_IRQChannel = USART2_IRQn;
+	//NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;
+	//NVIC_Init(&NVIC_InitStructure);
 }
 
 int __io_putchar(int ch)
