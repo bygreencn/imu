@@ -9,13 +9,16 @@ STM32F10X_INC = stm32f10x_adc.h stm32f10x_bkp.h stm32f10x_can.h stm32f10x_crc.h 
                 stm32f10x_tim.h stm32f10x_usart.h stm32f10x_wwdg.h misc.h core_cm3.h system_stm32f10x.h
 STM32F10X_SRC = $(STM32F10X_INC:.h=.c)
 STM32F10X_OBJ = $(STM32F10X_INC:.h=.o)
+CUSTOM_INC = i2c_functions.h pressure.h
+CUSTOM_SRC = $(CUSTOM_INC:.h=.c)
+CUSTOM_OBJ = $(CUSTOM_INC:.h=.o)
 
 all : imu
 
-imu : main.o startup_stm32f10x_hd.o $(STM32F10X_OBJ)
+imu : main.o startup_stm32f10x_hd.o $(STM32F10X_OBJ) $(CUSTOM_OBJ)
 	$(CROSS_COMPILE)$(LD) -T stm32f10x_hd.ld $(LDFLAGS) $^ -o $@
 
-main.o : main.c stm32f10x.h
+main.o : main.c stm32f10x.h global.h $(CUSTOM_INC)
 	$(CROSS_COMPILE)$(CC) -c $(CFLAGS) $< -o $@
 
 stm32f10x.h : core_cm3.h system_stm32f10x.h stm32f10x_conf.h 
@@ -23,6 +26,9 @@ stm32f10x.h : core_cm3.h system_stm32f10x.h stm32f10x_conf.h
 stm32f10x_conf.h : $(STM32F10X_INC)
 
 $(STM32F10X_OBJ) : %.o : %.c stm32f10x.h
+	$(CROSS_COMPILE)$(CC) -c $(CFLAGS) $< -o $@
+
+$(CUSTOM_OBJ) : %.o : %.c global.h
 	$(CROSS_COMPILE)$(CC) -c $(CFLAGS) $< -o $@
 
 startup_stm32f10x_hd.o : startup_stm32f10x_hd.s
